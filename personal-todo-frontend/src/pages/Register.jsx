@@ -1,0 +1,98 @@
+import { useState } from "react";
+import api from "../api/axios";
+import { useNavigate, Link } from "react-router-dom";
+
+const Register = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      await api.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
+
+      alert("Account created successfully");
+      navigate("/login");
+    } catch (err) {
+      alert(err.response?.data?.message || "Registration failed");
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-gray-800 p-4">
+      <form
+        onSubmit={handleRegister}
+        className="w-full max-w-[95%] sm:max-w-md p-6 sm:p-8 rounded-2xl
+                   bg-white/10 backdrop-blur-xl
+                   border border-white/20
+                   shadow-2xl"
+      >
+        <h2 className="text-3xl font-semibold text-white text-center mb-6">
+          Create Account
+        </h2>
+
+        <div className="space-y-4">
+          <input
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg
+                       bg-white/10 text-white
+                       placeholder-gray-400
+                       border border-white/20
+                       focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          />
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg
+                       bg-white/10 text-white
+                       placeholder-gray-400
+                       border border-white/20
+                       focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg
+                       bg-white/10 text-white
+                       placeholder-gray-400
+                       border border-white/20
+                       focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full mt-6 py-3 rounded-lg
+                     bg-cyan-500 hover:bg-cyan-400
+                     text-black font-semibold
+                     transition-all duration-200"
+        >
+          Register
+        </button>
+
+        <p className="text-sm text-gray-400 text-center mt-6">
+          Already have an account?{" "}
+          <Link to="/login" className="text-cyan-400 hover:underline">
+            Login
+          </Link>
+        </p>
+      </form>
+    </div>
+  );
+};
+
+export default Register;
