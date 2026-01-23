@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "node personal-todo-backend/src/server.js",
-    "dev": "nodemon personal-todo-backend/src/server.js"
+    "dev": "nodemon personal-todo-backend/src/server.js",
+    "build": "npm install && npm install --prefix personal-todo-frontend && npm run build --prefix personal-todo-frontend"
   },
   "keywords": [],
   "author": "",
