@@ -5,6 +5,8 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoute.js";
 import taskRoutes from "./routes/taskRoutes.js";
 
+import path from 'path';
+
 dotenv.config();
 
 connectDB()
@@ -18,9 +20,9 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Personal Todo API running");
-});
+// app.get("/", (req, res) => {
+//   res.send("Personal Todo API running");
+// });
 
 app.use(express.static(path.join(__dirname, '/personal-todo-frontend/dist')));
 app.get('*', (req, res) => {
