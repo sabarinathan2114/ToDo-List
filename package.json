@@ -1,11 +1,11 @@
 {
   "name": "personal-todo-backend",
   "version": "1.0.0",
-  "main": "src/server.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node personal-todo-backend/src/server.js",
-    "dev": "nodemon personal-todo-backend/src/server.js",
+    "start": "node personal-todo-backend/index.js",
+    "dev": "nodemon personal-todo-backend/index.js",
     "build": "npm install && npm install --prefix personal-todo-frontend && npm run build --prefix personal-todo-frontend"
   },
   "keywords": [],
