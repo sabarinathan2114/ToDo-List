@@ -5,10 +5,11 @@ import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoute.js";
 import taskRoutes from "./routes/taskRoutes.js";
 
-
 dotenv.config();
+
 connectDB()
 
+const __dirname = path.resolve();
 const app = express();
 
 app.use(cors());
@@ -19,6 +20,11 @@ app.use("/api/tasks", taskRoutes);
 
 app.get("/", (req, res) => {
   res.send("Personal Todo API running");
+});
+
+app.use(express.static(path.join(__dirname, '/personal-todo-frontend/dist')));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'personal-todo-frontend', 'dist', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
