@@ -25,10 +25,10 @@ app.use("/api/tasks", taskRoutes);
 //   res.send("Personal Todo API running");
 // });
 
-app.use(express.static(path.join(__dirname, "../personal-todo-frontend/dist")));
+app.use(express.static(path.join(__dirname, "../personal-todo-frontend/build")));
 app.get(/.*/, (req, res) => {
   res.sendFile(
-    path.join(__dirname, "../personal-todo-frontend/dist/index.html"),
+    path.join(__dirname, "../personal-todo-frontend/build/index.html"),
   );
 });
 
