@@ -1,19 +1,26 @@
 import { useState } from "react";
 import api from "../api/axios";
 import { FaPlus } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const TaskForm = ({ refresh }) => {
   const [title, setTitle] = useState("");
+  const [isAdding, setIsAdding] = useState(false);
 
   const addTask = async (e) => {
     e.preventDefault();
-    if (!title.trim()) return;
+    if (!title.trim() || isAdding) return;
+    setIsAdding(true);
     try {
       await api.post("/tasks", { title });
       setTitle("");
+      toast.success("Task added successfully!");
       refresh();
     } catch (err) {
+      toast.error("Failed to add task");
       console.error("Error adding task", err);
+    } finally {
+      setIsAdding(false);
     }
   };
 
@@ -27,10 +34,20 @@ const TaskForm = ({ refresh }) => {
       />
       <button
         type="submit"
-        className="w-full sm:w-auto px-8 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold shadow-lg shadow-cyan-500/30 transition-all duration-200 active:transform active:scale-95 flex items-center justify-center gap-2"
+        disabled={isAdding}
+        className={`w-full sm:w-auto px-8 py-3 rounded-xl font-bold shadow-lg transition-all duration-200 active:transform active:scale-95 flex items-center justify-center gap-2
+                   ${
+                     isAdding
+                       ? "bg-gray-600 cursor-not-allowed text-gray-400 shadow-none"
+                       : "bg-cyan-500 hover:bg-cyan-400 text-black shadow-cyan-500/30"
+                   }`}
       >
-        <FaPlus />
-        <span>Add Task</span>
+        {isAdding ? (
+          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+        ) : (
+          <FaPlus />
+        )}
+        <span>{isAdding ? "Adding..." : "Add Task"}</span>
       </button>
     </form>
   );

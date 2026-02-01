@@ -3,9 +3,12 @@ import api from "../api/axios";
 import TaskForm from "../components/TaskForm";
 import TaskList from "../components/TaskList";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
+  const [userName, setUserName] = useState("");
   const navigate = useNavigate();
 
   const fetchTasks = async () => {
@@ -13,17 +16,31 @@ const Dashboard = () => {
       const res = await api.get("/tasks");
       setTasks(res.data);
     } catch (err) {
+      if (err.response?.status === 401) {
+        handleLogout();
+      }
       console.error("Error fetching tasks", err);
     }
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setUserName(decoded.name || "User");
+      } catch (err) {
+        console.error("Invalid token", err);
+        handleLogout();
+      }
+    }
     fetchTasks();
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/");
+    toast.success("Logged out successfully");
+    navigate("/login");
   };
 
   return (
@@ -32,7 +49,8 @@ const Dashboard = () => {
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row justify-between items-center mb-8 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 shadow-2xl gap-4">
           <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight text-center sm:text-left">
-            My <span className="text-cyan-400">Tasks</span>
+            Welcome back,{" "}
+            <span className="text-cyan-400">{userName || "User"}</span>
           </h2>
           <button
             onClick={handleLogout}
