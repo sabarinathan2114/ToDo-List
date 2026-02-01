@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL:
+    process.env.api_url || "https://sabarinathan-todo-list.onrender.com/api",
 });
 
 api.interceptors.request.use((config) => {
